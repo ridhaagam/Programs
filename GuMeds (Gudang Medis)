@@ -1,0 +1,674 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <time.h>
+#include <stdbool.h>
+//Main program structure
+struct barang
+{
+	char nama[50],harga[50],jumlah[50],hari[50],bulan[50],tahun[50];
+}lihat[100],add,baru,baru2,temp,temp2,st;
+//Structure untuk pengecekan riwayat
+typedef struct seluruhriwayat
+{
+	char nama[50];
+}riwayat;
+	
+
+//Main program
+void menu();
+void admin();
+void tambah();
+void validasi();
+void tampil();
+void update();
+void ambil();
+void hapus();
+int cek1();
+int cek2();
+
+//Void untuk pengecekan riwayat
+void masuktambah();
+void tampiltambah();
+void masukupdate();
+void tampilupdate();
+void masukhapus();
+void tampilhapus();
+void hapusriwayat();
+
+int main()
+{
+	int masuk;
+ulang:
+	printf("\n");
+	printf("\n");
+	printf("\n");
+	printf("            _____________________________________________________\n");
+	printf("            |             SELAMAT DATANG DI APLIKASI            |\n");
+	printf("            |                                                   |\n"); 
+	printf("            |                GuMeds (Gudang Medis)              |\n");
+	printf("            |           ______________________________          |\n");
+	printf("            |                                                   |\n");
+	printf("            |                                                   |\n");
+	printf("            |   1. Menu utama                                   |\n");
+	printf("            |   2. Exit                                         |\n");
+	printf("            |                                                   |\n");
+	printf("            |                                                   |\n");
+	printf("            |___________________________________________________|\n");
+	printf("            |    Silahkan pilih: ");
+	scanf("%d",&masuk);
+	if (masuk == 1)
+	{
+		menu();
+	}
+	else if (masuk == 2)
+	{
+		exit(0);
+	}
+	else
+	{
+		printf("\n\nInputan salah, silahkan coba lagi\n");
+		goto ulang;
+	}
+	return 0;
+}
+
+void menu(){ 
+	int pilih;
+	ulang:
+	printf("\n");
+	printf("\n");
+	printf("\n");
+	printf("            _____________________________________________________\n");
+	printf("            |                      MENU UTAMA                   |\n");
+	printf("            |                                                   |\n"); 
+	printf("            |                GuMeds (Gudang Medis)              |\n");
+	printf("            |           ______________________________          |\n");
+	printf("            |                                                   |\n");
+	printf("            |                                                   |\n");
+	printf("            |   1. Melihat stok data GuMeds                     |\n");
+	printf("            |   2. Menambahkan barang                           |\n");
+	printf("            |   3. Mengubah data barang                         |\n");
+	printf("            |   4. Menghapus data barang                        |\n");
+	printf("            |   5. Admin Panel                                  |\n");
+	printf("            |   6. Exit                                         |\n");
+	printf("            |                                                   |\n");
+	printf("            |___________________________________________________|\n");
+	printf("            |    Silahkan pilih: ");
+	scanf("%d",&pilih);
+	
+	//Percabangan bertingkat
+		if (pilih == 1)
+	{
+		tampil();
+	}
+	else if (pilih == 2)
+	{
+		masuktambah();
+	}
+	else if (pilih == 3)
+	{
+		masukupdate();
+	}
+	else if (pilih == 4)
+	{
+		masukhapus();
+	}
+	else if (pilih == 5)
+	{
+		admin();
+	}
+	else if (pilih == 6)
+	{
+		exit(0);
+	}
+	else
+	{
+		printf("\n\nInputan salah, silahkan coba lagi\n");
+		goto ulang;
+	}
+}
+
+void admin(){
+	char username[50],password[50];
+	ulang:
+	printf("_____________________________________________________\n");
+	printf("\nSilahkan login terlebih dahulu:\n");
+    printf("\nEnter your username: "); 
+    scanf("%s",username); 
+ 
+    printf("\nEnter your password: "); 
+    scanf("%s",password); 
+ 
+    if(strcmp(username,"admin")==0){ 
+        if(strcmp(password,"admin")==0){ 
+ 
+        printf("\nSelamat datang di Admin Panel!\n");
+		printf("_____________________________________________________\n");
+        }
+		else { 
+    	printf("\nPassword salah! silahkan ulangi..\n"); 
+	   	goto ulang;
+       }
+	}       
+	else {
+    printf("\nUsername salah! silahkan ulangi..\n");
+    	goto ulang;
+	   }
+
+
+	int pilih;
+	printf("\n");
+	printf("\n");
+	printf("\n");
+	printf("            _____________________________________________________\n");
+	printf("            |                     ADMIN PANEL                   |\n");
+	printf("            |                                                   |\n"); 
+	printf("            |   1. Riwayat penambah barang                      |\n");
+	printf("            |   2. Riwayat update barang                        |\n");
+	printf("            |   3. Riwayat hapus barang                         |\n");
+	printf("            |   4. Kembali ke menu utama                        |\n");
+	printf("            |   5. Hapus seluruh riwayat                        |\n");
+	printf("            |   6. Exit                                         |\n");
+	printf("            |                                                   |\n");	
+	printf("            |                                                   |\n");
+	printf("            |___________________________________________________|\n");
+	printf("            |    Silahkan pilih: ");
+	scanf("%d",&pilih);
+	if (pilih == 1)
+	{
+		tampiltambah();
+	}
+	else if (pilih == 2)
+	{
+		tampilupdate();
+	}
+	else if (pilih == 3)
+	{
+		tampilhapus();
+	}
+	else if (pilih == 4)
+	{
+		menu();
+	}
+	else if (pilih == 5)
+	{
+		hapusriwayat();
+	}
+	else if (pilih == 6)
+	{
+		exit(0);
+	}
+	else
+	{
+		printf("\n\nInputan salah, silahkan coba lagi\n");
+		goto ulang;
+	}	
+}
+
+//Structure riwayat (admin panel)
+//Tambah
+void masuktambah()
+{
+	riwayat rtambah;
+	FILE *fptr;
+	fptr = fopen("rtambah.txt","a");
+
+    time_t t;
+	time(&t);
+	ulang:
+	printf("Silahkan masukkan nama kalian: "); fflush(stdin);
+	scanf("%[^\n]#", rtambah.nama);
+	if (strlen(rtambah.nama)<=2)
+	{
+		printf("Nama yang di input harus lebih dari 2 huruf, silahkan coba lagi!\n\n");
+		goto ulang;
+	}
+	fprintf(fptr,"Nama: %s pada %s",rtambah.nama, ctime(&t));
+	fclose(fptr);
+	return tambah();
+}
+void tampiltambah(){
+	
+    FILE *fptr;
+	char buff[255];
+
+	if ((fptr = fopen("rtambah.txt","r")) == NULL){ 
+       printf("Gagal Membuka File");
+   }
+   printf("\n\nDaftar riwayat tambah barang:\n");
+    while (fgets(buff,sizeof(buff),fptr)){ 
+      printf("%s\n",buff); 
+	}
+   fclose(fptr);
+   return admin();
+}
+//Update
+void masukupdate()
+{
+	riwayat rupdate;
+	FILE *fptr;
+	fptr = fopen("rupdate.txt","a");
+
+    time_t t;
+	time(&t);
+	ulang:
+	printf("Silahkan masukkan nama kalian: "); fflush(stdin);
+	scanf("%[^\n]#", rupdate.nama);
+		if (strlen(rupdate.nama)<=2)
+	{
+		printf("Nama yang di input harus lebih dari 2 huruf, silahkan coba lagi!\n\n");
+		goto ulang;
+	}
+	fprintf(fptr,"Nama: %s pada %s",rupdate.nama, ctime(&t));
+	fclose(fptr);
+	return update();
+}
+void tampilupdate(){
+  FILE *fptr;
+  
+	char buff[255];
+
+	if ((fptr = fopen("rupdate.txt","r")) == NULL){
+       printf("Gagal Membuka File");
+   }
+   printf("\n\nDaftar riwayat tambah barang\n");
+    while (fgets(buff,sizeof(buff),fptr)){ 
+      printf("%s\n",buff); 
+	}
+   fclose(fptr);
+   return admin();
+}
+//Hapus
+void masukhapus()
+{
+	riwayat rhapus;
+	FILE *fptr;
+	fptr = fopen("rhapus.txt","a");
+
+    time_t t;
+	time(&t);
+	ulang:
+	printf("Silahkan masukkan nama kalian: "); fflush(stdin);
+	scanf("%[^\n]#", rhapus.nama);
+		if (strlen(rhapus.nama)<=2)
+	{
+		printf("Nama yang di input harus lebih dari 2 huruf, silahkan coba lagi!\n\n");
+		goto ulang;
+	}
+	fprintf(fptr,"Nama: %s pada %s",rhapus.nama, ctime(&t));
+	fclose(fptr);
+	return hapus();
+}
+void tampilhapus(){
+  FILE *fptr;
+	char buff[255];
+
+	if ((fptr = fopen("rhapus.txt","r")) == NULL){ 
+       printf("Gagal Membuka File");
+   }
+   printf("\n\nDaftar riwayat tambah barang\n");
+    while (fgets(buff,sizeof(buff),fptr)){ 
+      printf("%s\n",buff); 
+	}
+   fclose(fptr);
+   return admin();
+}
+void hapusriwayat()
+{ 
+FILE *fp1, *fp2, *fp3;
+	fp1=fopen("rtambah.txt","w+");
+	fp2=fopen("rupdate.txt","w+");
+	fp3=fopen("rhapus.txt","w+");
+   	
+	   printf("\nRiwayat tambah,update,hapus berhasil dibersihkan\n");
+	   
+fclose(fp1);
+fclose(fp2);
+fclose(fp3);
+}
+//Akhir admin panel
+
+//Main program
+void tambah(){
+	
+	char nama[50],harga[50],jumlah[50],hari[50],bulan[50],tahun[50];
+	bool s1,s2,s3,s4,s5;
+	int i;
+	printf("\n-------------------------\n"); fflush(stdin);
+	printf("\nMasukkan nama barang: "); 
+	scanf("%[^\n]#", nama); fflush(stdin); 
+	printf("\nMasukkan Jumlah barang: "); 
+	scanf("%s", jumlah); fflush(stdin);
+	printf("\nMasukkan harga satuan barang:Rp. ");
+	scanf("%s", harga); fflush(stdin);
+	printf("-------------------------\n");
+	printf("Tanggal Kadaluarsa (dd-mm-yyyy)\n");
+	printf("\nMasukkan Hari Kadaluarsa: ");
+	scanf("%s",hari); fflush(stdin);
+	printf("\nMasukkan Bulan Kadaluarsa: ");
+	scanf("%s",bulan); fflush(stdin);
+	printf("\nMasukkan Tahun Kadaluarsa: ");
+	scanf("%s",tahun); fflush(stdin);
+	
+	//Pengecekan
+	if(strlen(nama)<=2){
+		printf("username harus lebih dari 2 karakter\n\n");
+		return menu();
+	}
+	//Mengecek jumlah
+	
+	s1 = false;
+	for (i = 0; i < strlen(jumlah); i++)
+		{
+	if(jumlah[i] >= 48 && jumlah[i] <= 57);
+	else 
+	{
+	s1 = true; 
+	}
+		}
+	if(s1 == true)
+	{
+	printf("Jumlah harus dalam bentuk angka!\n");
+	return menu();
+	}
+	
+	//Mengecek harga
+	
+	s2 = false;
+	for (i = 0; i < strlen(harga); i++)
+		{
+	if(harga[i]>='0' && harga[i]<='9');
+	else
+	{
+	s2 = true; 
+	}
+		}
+	if(s2 == true)
+	{
+	printf("Harga harus dalam bentuk angka!\n");
+	return menu();
+	}
+	
+	//Mengecek hari
+		
+	s3 = false;
+	for (i = 0; i < strlen(hari); i++)
+		{
+	if(hari[i]>='0' && hari[i]<='9');
+	else
+	{
+	s3 = true; 
+	}
+		}
+	if(s3 == true)
+	{
+	printf("Hari harus dalam bentuk angka!\n");
+	return menu();
+	}
+
+	//Mengecek bulan
+	
+	s4 = false;
+	for (i = 0; i < strlen(bulan); i++)
+		{
+	if(bulan[i]>='0' && bulan[i]<='9');
+	else
+	{
+	s4 = true; 
+	}
+		}
+	if(s4 == true)
+	{
+	printf("Bulan harus dalam bentuk angka!\n");
+	return menu();
+	}
+
+	//Mengecek tahun
+	
+	s5 = false;
+	for (i = 0; i < strlen(bulan); i++)
+		{
+	if(bulan[i]>='0' && bulan[i]<='9');
+	else
+	{
+	s5 = true; 
+	}
+		}
+	if(s5 == true)
+	{
+	printf("Tahun harus dalam bentuk angka!\n");
+	return menu();
+	}
+	
+	validasi(nama,jumlah,harga,hari,bulan,tahun);
+	
+	menu();
+}
+
+void validasi(char nama[50],char jumlah[50],char harga[50],char hari[50],char bulan[50],char tahun[50]){
+
+	FILE *fp;
+	fp = fopen("apotik.txt","a+");
+   if(fp==NULL){
+    	printf("\n");
+		printf("Error: Silahkan buat file apotik.txt terlebih dahulu.");
+    }
+	while(fscanf(fp, "%s", add.nama)!=EOF){ 
+		if(strcmp(add.nama, nama)==0){
+			printf("\n Nama barang sudah terdaftar!\n");
+			system("pause");
+			system("cls");
+			return menu();
+		}
+	}
+	
+	fprintf(fp, "%s %s %s %s %s %s \n",nama,jumlah,harga,hari,bulan,tahun); 
+	fclose(fp);
+	printf("\n  \t\t\tBarang berhasil ditambah\n");
+	printf ("\nNama barang: %s\t\tJumlah barang: %s\tHarga satuan: Rp. %s\tTanggal Kadaluarsa: %s-%s-%s\n",
+	nama,jumlah,harga,hari,bulan,tahun);
+}
+
+void tampil(){
+
+	
+	FILE *fp;
+	fp = fopen("apotik.txt","r");
+   if(fp==NULL){
+		printf("\n");
+       printf("Error: Silahkan buat file apotik.dat terlebih dahulu.");
+    }
+	 int j=0,i;
+ 	while(fscanf(fp,"%s %s %s %s %s %s",lihat[j].nama,lihat[j].jumlah,lihat[j].harga,lihat[j].hari,lihat[j].bulan,lihat[j].tahun)!=EOF)
+ 		j++;
+        printf ("_______________________________________________________________________________________________________________________");
+		printf("                                        Isi GuMeds (Gudang Medis)                                                       \n");
+    for(i=0; i<j; i++)
+    {
+        printf ("_______________________________________________________________________________________________________________________");
+        printf ("\nNama barang: %s\t\tJumlah barang: %s\tHarga satuan: Rp. %s\tTanggal Kadaluarsa: %s-%s-%s\n",
+		lihat[i].nama,lihat[i].jumlah,lihat[i].harga,lihat[i].hari,lihat[i].bulan,lihat[i].tahun);
+    }
+    fclose(fp);
+    return menu();
+    
+}
+
+int cek1(){
+
+
+	FILE *in = fopen("apotik.txt","r");
+	
+	if(!in){
+		return 0;
+	}else{
+		while(!feof(in)){
+			fscanf(in,"%s",temp.nama);
+			fscanf(in,"%s",temp.jumlah);
+			fscanf(in,"%s",temp.harga);
+			fscanf(in,"%s",temp.hari);
+			fscanf(in,"%s",temp.bulan);
+			fscanf(in,"%s",temp.tahun);			
+			
+			if(strcmp(st.nama,temp.nama)==0){
+				strcpy(st.jumlah,temp.jumlah);
+				strcpy(st.harga,temp.harga);
+				strcpy(st.hari,temp.hari);
+				strcpy(st.bulan,temp.bulan);
+				strcpy(st.tahun,temp.tahun);
+				fclose(in);
+				return 1;
+			}
+		}
+	}
+	fclose(in);
+	return 0;
+}
+
+void update()		
+{
+	FILE *fp;
+
+    fp=fopen("apotik.txt","r");
+    FILE *out = fopen("apotik2.txt","a");
+    int i=0;
+	fflush(stdin);
+	printf("\n\n\tSilahkan masukkan nama barang: ");
+    scanf("%s",st.nama);fflush(stdin);
+	
+	if(cek1()==1){
+        printf("\nNama : %s",st.nama);
+        printf("\nJumlah : %s",st.jumlah);
+        printf("\nHarga : %s",st.harga);
+        printf("\nHari : %s",st.hari);
+        printf("\nBulan : %s",st.bulan);
+        printf("\nTahun : %s",st.tahun);
+           
+	   	printf("\nMasukkan nama barang: "); 
+	   	scanf("%[^\n]#", baru.nama); fflush(stdin); 
+	   	printf("\nMasukkan Jumlah barang: "); 
+	   	scanf("%s", baru.jumlah); fflush(stdin);
+	   	printf("\nMasukkan harga satuan barang:Rp. ");
+	   	scanf("%s", baru.harga); fflush(stdin);
+	   	printf("-------------------------\n");
+	   	printf("Tanggal Kadaluarsa (dd-mm-yyyy)\n");
+	   	printf("\nMasukkan Hari Kadaluarsa: ");
+	   	scanf("%s",baru.hari); fflush(stdin);
+	   	printf("\nMasukkan Bulan Kadaluarsa: ");
+	   	scanf("%s",baru.bulan); fflush(stdin);
+	   	printf("\nMasukkan Tahun Kadaluarsa: ");
+	   	scanf("%s",baru.tahun); fflush(stdin);
+        
+            
+        FILE *in = fopen("apotik.txt","r");
+        
+        while(!feof(in)){
+			fscanf(in,"%s",temp.nama);
+			fscanf(in,"%s",temp.jumlah);
+			fscanf(in,"%s",temp.harga);
+			fscanf(in,"%s",temp.hari);
+			fscanf(in,"%s",temp.bulan);
+			fscanf(in,"%s",temp.tahun);		
+            
+			if(strcmp(temp.nama,st.nama)==0){
+				fprintf(out,"%s %s %s %s %s %s\n",baru.nama, baru.jumlah, baru.harga,baru.hari,baru.bulan,baru.tahun);
+				i = 1;
+			}else{
+				fprintf(out,"%s %s %s %s %s %s\n",temp.nama, temp.jumlah, temp.harga,temp.hari,temp.bulan,temp.tahun);
+			}
+			fscanf(in,"\n");
+		}
+		fclose(in);
+		fclose(out);
+    }
+    fclose(fp);
+  	
+  	if(i==1){
+  		printf("\n\n\t Data Berhasil di update");
+  		remove("apotik.txt");
+  		rename("apotik2.txt","apotik.txt");
+  		return menu();
+	}else{
+		printf("\n\n\t Data tidak ada!");
+	}
+}
+
+int cek2(){
+	FILE *in = fopen("apotik.txt","r");
+	
+	if(!in){
+		return 0;
+	}else{
+		while(!feof(in)){
+			fscanf(in,"%s",temp2.nama);
+			fscanf(in,"%s",temp2.jumlah);
+			fscanf(in,"%s",temp2.harga);
+			fscanf(in,"%s",temp2.hari);
+			fscanf(in,"%s",temp2.bulan);
+			fscanf(in,"%s",temp2.tahun);			
+			
+			if(strcmp(st.nama,temp2.nama)==0){
+				strcpy(st.jumlah,temp2.jumlah);
+				strcpy(st.harga,temp2.harga);
+				strcpy(st.hari,temp2.hari);
+				strcpy(st.bulan,temp2.bulan);
+				strcpy(st.tahun,temp2.tahun);
+				fclose(in);
+				return 1;
+			}
+		}
+	}
+	fclose(in);
+	return 0;
+}
+
+void hapus()
+{
+	FILE *fp;
+    fp=fopen("apotik.txt","r");
+    FILE *out = fopen("apotik3.txt","a");
+    int i=0;
+	fflush(stdin);
+	printf("\n\n\tSilahkan masukkan nama barang: ");
+    scanf("%s",st.nama);fflush(stdin);
+	
+	if(cek2()==1){
+        printf("\nNama : %s",st.nama);
+        printf("\nJumlah : %s",st.jumlah);
+        printf("\nHarga : %s",st.harga);
+        printf("\nHari : %s",st.hari);
+        printf("\nBulan : %s",st.bulan);
+        printf("\nTahun : %s",st.tahun);
+        FILE *in = fopen("apotik.txt","r");
+        
+        while(!feof(in)){
+			fscanf(in,"%s",temp2.nama);
+			fscanf(in,"%s",temp2.jumlah);
+			fscanf(in,"%s",temp2.harga);
+			fscanf(in,"%s",temp2.hari);
+			fscanf(in,"%s",temp2.bulan);
+			fscanf(in,"%s",temp2.tahun);	
+            
+			if(strcmp(temp2.nama,st.nama)==0){
+				fprintf(out,"%s %s %s %s %s %s\n",baru2.nama, baru2.jumlah, baru2.harga,baru2.hari,baru2.bulan,baru2.tahun);
+				i = 1;
+			}else{
+				fprintf(out,"%s %s %s %s %s %s\n",temp2.nama, temp2.jumlah, temp2.harga,temp2.hari,temp2.bulan,temp2.tahun);
+			}
+			fscanf(in,"\n");
+		}
+		fclose(in);
+		fclose(out);
+    }
+    fclose(fp);
+  	
+  	if(i==1){
+  		printf("\n\n\t Data berhasil di hapus\n");
+  		remove("apotik.txt");
+  		rename("apotik3.txt","apotik.txt");
+  		return menu();
+	}else{
+		printf("\n\n\t Data gagal di hapus");
+	}
+}
